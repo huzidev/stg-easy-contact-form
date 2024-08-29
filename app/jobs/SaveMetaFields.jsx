@@ -30,8 +30,6 @@ export async function saveMetaFields(contact, session, admin) {
       }),
     }));
 
-    // console.log("SW what is formattedForms", formattedForms[0]?.fields);
-
     metafield.namespace = "swllc";
     metafield.key = "forms";
     metafield.type = "json";
