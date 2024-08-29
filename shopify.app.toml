@@ -3,7 +3,7 @@
 client_id = "4522a586e2b5f4907b451ee8ff7e30af"
 name = "stg-contact-form-app"
 handle = "stg-contact-form-app"
-application_url = "https://beneath-inbox-jar-bbs.trycloudflare.com"
+application_url = "https://stg-easy-contact-form.vercel.app/"
 embedded = true
 
 [build]
@@ -17,9 +17,9 @@ scopes = ""
 
 [auth]
 redirect_urls = [
-  "https://beneath-inbox-jar-bbs.trycloudflare.com/auth/callback",
-  "https://beneath-inbox-jar-bbs.trycloudflare.com/auth/shopify/callback",
-  "https://beneath-inbox-jar-bbs.trycloudflare.com/api/auth/callback"
+  "https://stg-easy-contact-form.vercel.app/auth/callback",
+  "https://stg-easy-contact-form.vercel.app/auth/shopify/callback",
+  "https://stg-easy-contact-form.vercel.app/api/auth/callback",
 ]
 
 [webhooks]
