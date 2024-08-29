@@ -1,0 +1,29 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "bf54a2f05f474fe0fab1cc18fcb1a609"
+name = "contact-form-app"
+handle = "contact-form-app-9"
+application_url = "https://beneath-inbox-jar-bbs.trycloudflare.com"
+embedded = true
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "dev-amd-store.myshopify.com"
+include_config_on_deploy = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = ""
+
+[auth]
+redirect_urls = [
+  "https://beneath-inbox-jar-bbs.trycloudflare.com/auth/callback",
+  "https://beneath-inbox-jar-bbs.trycloudflare.com/auth/shopify/callback",
+  "https://beneath-inbox-jar-bbs.trycloudflare.com/api/auth/callback"
+]
+
+[webhooks]
+api_version = "2024-07"
+
+[pos]
+embedded = false

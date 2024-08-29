@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Note that some adapters may set a maximum length for the String type by default, please ensure your strings are long
+// enough when changing adapters.
+// See https://www.prisma.io/docs/orm/reference/prisma-schema-reference#string for more information
+datasource db {
+  provider = "sqlite"
+  url      = "file:dev.sqlite"
+}
+
+model Session {
+  id            String    @id
+  shop          String
+  state         String
+  isOnline      Boolean   @default(false)
+  scope         String?
+  expires       DateTime?
+  accessToken   String
+  userId        BigInt?
+  firstName     String?
+  lastName      String?
+  email         String?
+  accountOwner  Boolean   @default(false)
+  locale        String?
+  collaborator  Boolean?  @default(false)
+  emailVerified Boolean?  @default(false)
+}
+
+model Form {
+  id             Int      @id @default(autoincrement())
+  shopify_url    String
+  name           String
+  heading        String?
+  description    String?
+  showTitle      Boolean   @default(false)
+  onlinePublish  Boolean   @default(false)
+  fields         Field[]
+}
+
+model Field {
+  id            Int      @id @default(autoincrement())
+  shopify_url   String
+  fieldName     String
+  fieldLabel    String
+  placeholder   String
+  defaultValue  String
+  fieldType     String
+  min           Int?
+  max           Int?
+  totalLines    Int?
+  isRequired    Boolean  @default(false)
+  options       Option[]
+  form          Form     @relation(fields: [formId], references: [id], onDelete: Cascade)
+  formId        Int
+}
+
+model Option {
+  id       Int    @id @default(autoincrement())
+  label    String
+  value    String
+  field    Field  @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+  fieldId  Int
+}

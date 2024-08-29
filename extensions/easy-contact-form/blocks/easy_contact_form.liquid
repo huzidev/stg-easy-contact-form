@@ -1,0 +1,117 @@
+<div id="sw-contact-form">
+  {% assign form_id = block.settings.form_id %}
+  {% assign forms = shop.metafields.swllc.forms.value %}
+  {% assign selected_form = nil %}
+
+  {% for form in forms %}
+    {% if form.formId == form_id  %}
+      {% assign selected_form = form %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+
+  {% if selected_form %}
+    <h3>{{ selected_form.title }}</h3>
+
+    <form class="contact-form">
+      {% for field in selected_form.fields %}
+        <div class="form-group">
+          <label for="field-{{ field.id }}">{{ field.label }}</label>
+          {% case field.type %}
+            {% when "text" %}
+              <input 
+                type="text" 
+                id="field-{{ field.id }}" 
+                name="{{ field.name }}" 
+                placeholder="{{ field.placeholder }}" 
+                {% if field.isRequired %} required {% endif %}
+              >
+            {% when "email" %}
+              <input 
+                type="email" 
+                id="field-{{ field.id }}" 
+                name="{{ field.name }}" 
+                placeholder="{{ field.placeholder }}" 
+                {% if field.isRequired %} required {% endif %}
+              >
+            {% when "textarea" %}
+              <textarea 
+                id="field-{{ field.id }}" 
+                name="{{ field.name }}" 
+                placeholder="{{ field.placeholder }}" 
+                {% if field.isRequired %} required {% endif %}
+                rows="4"
+              ></textarea>
+          {% endcase %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="submit-button">Submit</button>
+    </form>
+  {% else %}
+    <p>No form found for the provided ID.</p>
+  {% endif %}
+</div>
+
+<style>
+  #sw-contact-form {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+
+  .contact-form {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  .form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+  .submit-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+  .submit-button:hover {
+    background-color: #0056b3;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Easy Contact Form",
+  "target": "section",
+  "settings": [
+    {
+      "type": "number",
+      "id": "form_id",
+      "label": "Published Form Id"
+    }
+  ]
+}
+{% endschema %}

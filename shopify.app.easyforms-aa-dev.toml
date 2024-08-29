@@ -1,0 +1,29 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "f0f5e1e7bc0ecabfc7edcb277a7e21e6"
+name = "EasyForms-AA-Dev"
+handle = "easyforms-aa-dev"
+application_url = "https://bear-malawi-prefers-therapist.trycloudflare.com"
+embedded = true
+
+[build]
+automatically_update_urls_on_dev = true
+dev_store_url = "wishlist-store-testing-1.myshopify.com"
+include_config_on_deploy = true
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = ""
+
+[auth]
+redirect_urls = [
+  "https://bear-malawi-prefers-therapist.trycloudflare.com/auth/callback",
+  "https://bear-malawi-prefers-therapist.trycloudflare.com/auth/shopify/callback",
+  "https://bear-malawi-prefers-therapist.trycloudflare.com/api/auth/callback"
+]
+
+[webhooks]
+api_version = "2024-07"
+
+[pos]
+embedded = false
