@@ -53,7 +53,7 @@ export default class Contact {
   async createForm(onlinePublish, formValues, fieldsValues) {
     try {
       const { heading, description, showTitle } = formValues;
-      
+
       let form = await prisma.form.create({
         data: {
           shopify_url: this.shopUrl,
@@ -70,7 +70,7 @@ export default class Contact {
         status: 200,
         fields,
         form,
-        message: 'Form Created Successfully!'
+        message: "Form Created Successfully!",
       };
     } catch (error) {
       console.error("Error: ", error);
@@ -84,7 +84,7 @@ export default class Contact {
       return {
         status: 200,
         fields,
-        message: 'Form Updated Successfully'
+        message: "Form Updated Successfully",
       };
     } catch (error) {
       console.error("Error: ", error);
@@ -201,10 +201,14 @@ export default class Contact {
           shopify_url: this.shopUrl,
         },
         include: {
-          fields: true,
+          fields: {
+            include: {
+              options: true,
+            },
+          },
         },
         orderBy: {
-          id: "desc"
+          id: "desc",
         },
       });
       return {

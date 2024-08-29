@@ -150,22 +150,6 @@ export default function SidebarField({
     });
   }
 
-  // useEffect(() => {
-  //   if (showModal) {
-  //     console.log("running on Show modal state", showModal);
-  //     document.getElementById("my-modal").show();
-  //   }
-  // }, [showModal])
-
-  // useEffect(() => {
-  //   if (showModal) {
-  //     // Use setTimeout to ensure the DOM has been updated with the modal before calling show
-  //     setTimeout(() => {
-  //       document.getElementById("my-modal").show();
-  //     }, 0);
-  //   }
-  // }, [showModal]);
-
   return (
     <Box width="100%" style={{ cursor: "pointer" }}>
       <BlockStack gap="500">
@@ -254,11 +238,18 @@ export default function SidebarField({
               </Box>
             )}
             <Box>
-              <TextField
-                label="Default Value"
-                value={defaultValue}
-                onChange={(value) => handleInputChange("defaultValue", value)}
-              />
+              {/* Hide Default Value Label if checkbox or radio button */}
+              {![
+                FieldType.CHECKBOX,
+                FieldType.RADIO,
+                FieldType.SELECT,
+              ].includes(fieldType) && (
+                <TextField
+                  label="Default Value"
+                  value={defaultValue}
+                  onChange={(value) => handleInputChange("defaultValue", value)}
+                />
+              )}
               {fieldType === FieldType.NUMBER && (
                 <>
                   <TextField

@@ -10,22 +10,26 @@ export async function saveMetaFields(contact, session, admin) {
     const formattedForms = publishedForms.map((form) => ({
       formId: form.id,
       title: form.name,
-      fields: form.fields.map((field) => ({
-        id: field.id,
-        name: field.fieldName,
-        label: field.fieldLabel,
-        placeholder: field.placeholder,
-        defaultValue: field.defaultValue,
-        type: field.fieldType,
-        isRequired: field.isRequired,
-        options:
-          field.options?.map((option) => ({
-            id: option.id,
-            label: option.label,
-            value: option.value,
-          })) || [],
-      })),
+      fields: form.fields.map((field) => {
+        return {
+          id: field.id,
+          name: field.fieldName,
+          label: field.fieldLabel,
+          placeholder: field.placeholder,
+          defaultValue: field.defaultValue,
+          type: field.fieldType,
+          isRequired: field.isRequired,
+          options:
+            field.options?.map((option) => ({
+              id: option.id,
+              label: option.label,
+              value: option.value,
+            })) || [],
+        };
+      }),
     }));
+
+    // console.log("SW what is formattedForms", formattedForms[0]?.fields);
 
     metafield.namespace = "swllc";
     metafield.key = "forms";

@@ -8,7 +8,7 @@ import {
   RadioButton,
   Select,
   Text,
-  TextField
+  TextField,
 } from "@shopify/polaris";
 import React, { useCallback, useState } from "react";
 import { TextTypes } from "../utils/data";
@@ -16,18 +16,21 @@ import { TextTypes } from "../utils/data";
 export default function Preview({ title, showTitle, formDescription, fields }) {
   const [fieldValues, setFieldValues] = useState({});
 
-  const getValue = useCallback((fieldName) => {
-    return fieldValues[fieldName]
-  }, [fieldValues])
+  const getValue = useCallback(
+    (fieldName) => {
+      return fieldValues[fieldName];
+    },
+    [fieldValues],
+  );
 
   const setValue = (fieldName, value) => {
     setFieldValues((prev) => {
       return {
         ...prev,
-        [fieldName]: value
-      }
-    })
-  }
+        [fieldName]: value,
+      };
+    });
+  };
 
   return (
     <Box maxWidth="600px">
@@ -45,6 +48,7 @@ export default function Preview({ title, showTitle, formDescription, fields }) {
                 fieldLabel,
                 fieldName,
                 placeholder,
+                defaultValue,
                 fieldType,
                 isRequired,
                 selectOptions,
@@ -52,6 +56,7 @@ export default function Preview({ title, showTitle, formDescription, fields }) {
                 max,
                 totalLines,
               } = field;
+              console.log("SW defaultValue", !!defaultValue);
               const value = getValue(fieldName);
               const textFieldLabel = isRequired
                 ? `${fieldLabel} *`
@@ -62,7 +67,7 @@ export default function Preview({ title, showTitle, formDescription, fields }) {
                   label={textFieldLabel}
                   key={i}
                   placeholder={placeholder}
-                  value={value}
+                  value={!!defaultValue ? defaultValue : value}
                   multiline={
                     fieldType === "textarea" ? parseInt(totalLines) : 1
                   }
@@ -74,7 +79,6 @@ export default function Preview({ title, showTitle, formDescription, fields }) {
                   key={i}
                   label={textFieldLabel}
                   options={selectOptions}
-                  value={value}
                   onChange={(value) => setValue(fieldName, value)}
                 />
               ) : fieldType === "radio" ? (

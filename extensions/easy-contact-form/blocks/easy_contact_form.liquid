@@ -23,6 +23,7 @@
                 type="text" 
                 id="field-{{ field.id }}" 
                 name="{{ field.name }}" 
+                value="{{ field.defaultValue }}" 
                 placeholder="{{ field.placeholder }}" 
                 {% if field.isRequired %} required {% endif %}
               >
@@ -31,6 +32,7 @@
                 type="email" 
                 id="field-{{ field.id }}" 
                 name="{{ field.name }}" 
+                value="{{ field.defaultValue }}" 
                 placeholder="{{ field.placeholder }}" 
                 {% if field.isRequired %} required {% endif %}
               >
@@ -42,6 +44,50 @@
                 {% if field.isRequired %} required {% endif %}
                 rows="4"
               ></textarea>
+              <textarea 
+                id="field-{{ field.id }}" 
+                name="{{ field.name }}" 
+                placeholder="{{ field.placeholder }}" 
+                {% if field.isRequired %} required {% endif %}
+                rows="{{ field.totalLines | default: 4 }}"
+              >{{ field.defaultValue }}</textarea>
+              {% when "number" %}
+                <input 
+                  type="number" 
+                  id="field-{{ field.id }}" 
+                  name="{{ field.name }}" 
+                  placeholder="{{ field.placeholder }}" 
+                  value="{{ field.defaultValue }}" 
+                  min="{{ field.min }}" 
+                  max="{{ field.max }}" 
+                  {% if field.isRequired %} required {% endif %}
+                >
+                {% when "select" %}
+                  <select id="field-{{ field.id }}" name="{{ field.name }}" {% if field.isRequired %} required {% endif %}>
+                    {% for option in field.options %}
+                      <option value="{{ option.value }}" {% if option.value == field.defaultValue %} selected {% endif %}>
+                        {{ option.label }}
+                      </option>
+                    {% endfor %}
+                  </select>
+            {% when "radio" %}
+              <div class="check-btn-container">
+                <input 
+                  class="check-btn"
+                  type="radio" 
+                  id="field-{{ field.id }}" 
+                  name="{{ field.name }}" 
+                >
+              </div>
+            {% when "checkbox" %}
+              <div class="check-btn-container">
+                <input 
+                class="check-btn"
+                type="checkbox" 
+                id="field-{{ field.id }}" 
+                name="{{ field.name }}" 
+                >
+              </div>
           {% endcase %}
         </div>
       {% endfor %}
@@ -78,14 +124,15 @@
   }
 
   .form-group input,
-  .form-group textarea {
+  .form-group textarea,
+  .form-group select {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
   }
-
+  
   .submit-button {
     padding: 10px 20px;
     border: none;
@@ -100,6 +147,16 @@
   .submit-button:hover {
     background-color: #0056b3;
   }
+
+  .check-btn-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .check-btn-container input {
+    max-width: 15px;
+  }
+
 </style>
 
 {% schema %}
