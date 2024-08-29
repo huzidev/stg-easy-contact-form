@@ -42,13 +42,6 @@
                 name="{{ field.name }}" 
                 placeholder="{{ field.placeholder }}" 
                 {% if field.isRequired %} required {% endif %}
-                rows="4"
-              ></textarea>
-              <textarea 
-                id="field-{{ field.id }}" 
-                name="{{ field.name }}" 
-                placeholder="{{ field.placeholder }}" 
-                {% if field.isRequired %} required {% endif %}
                 rows="{{ field.totalLines | default: 4 }}"
               >{{ field.defaultValue }}</textarea>
               {% when "number" %}

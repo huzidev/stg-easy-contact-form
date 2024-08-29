@@ -2,7 +2,7 @@
   "name": "contact-form-app",
   "private": true,
   "scripts": {
-    "build": "prisma generate && remix vite:build",
+    "build": "prisma generate && prisma migrate deploy && remix vite:build",
     "dev": "shopify app dev --theme=142134837479",
     "config:link": "shopify app config link",
     "generate": "shopify app generate",
