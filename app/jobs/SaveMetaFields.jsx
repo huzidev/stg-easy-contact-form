@@ -18,6 +18,7 @@ export async function saveMetaFields(contact, session, admin) {
           placeholder: field.placeholder,
           defaultValue: field.defaultValue,
           type: field.fieldType,
+          totalLines: field.totalLines,
           isRequired: field.isRequired,
           options:
             field.options?.map((option) => ({
