@@ -1,14 +1,14 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
-client_id = "bf54a2f05f474fe0fab1cc18fcb1a609"
-name = "contact-form-app"
-handle = "contact-form-app-9"
+client_id = "4522a586e2b5f4907b451ee8ff7e30af"
+name = "stg-contact-form-app"
+handle = "stg-contact-form-app"
 application_url = "https://beneath-inbox-jar-bbs.trycloudflare.com"
 embedded = true
 
 [build]
 automatically_update_urls_on_dev = true
-dev_store_url = "dev-amd-store.myshopify.com"
+dev_store_url = "easycontactform-staging.myshopify.com"
 include_config_on_deploy = true
 
 [access_scopes]
