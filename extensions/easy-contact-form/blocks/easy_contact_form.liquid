@@ -1,96 +1,3 @@
-<div id="sw-contact-form">
-  {% assign form_id = block.settings.form_id %}
-  {% assign forms = shop.metafields.swllc.forms.value %}
-  {% assign selected_form = nil %}
-
-  {% for form in forms %}
-    {% if form.formId == form_id  %}
-      {% assign selected_form = form %}
-      {% break %}
-    {% endif %}
-  {% endfor %}
-
-  {% if selected_form %}
-    <h3>{{ selected_form.title }}</h3>
-
-    <form class="contact-form">
-      {% for field in selected_form.fields %}
-        <div class="form-group">
-          <label for="field-{{ field.id }}">{{ field.label }}</label>
-          {% case field.type %}
-            {% when "text" %}
-              <input 
-                type="text" 
-                id="field-{{ field.id }}" 
-                name="{{ field.name }}" 
-                value="{{ field.defaultValue }}" 
-                placeholder="{{ field.placeholder }}" 
-                {% if field.isRequired %} required {% endif %}
-              >
-            {% when "email" %}
-              <input 
-                type="email" 
-                id="field-{{ field.id }}" 
-                name="{{ field.name }}" 
-                value="{{ field.defaultValue }}" 
-                placeholder="{{ field.placeholder }}" 
-                {% if field.isRequired %} required {% endif %}
-              >
-            {% when "textarea" %}
-              <textarea 
-                id="field-{{ field.id }}" 
-                name="{{ field.name }}" 
-                placeholder="{{ field.placeholder }}" 
-                {% if field.isRequired %} required {% endif %}
-                rows="{{ field.totalLines | default: 4 }}"
-              >{{ field.defaultValue }}</textarea>
-              {% when "number" %}
-                <input 
-                  type="number" 
-                  id="field-{{ field.id }}" 
-                  name="{{ field.name }}" 
-                  placeholder="{{ field.placeholder }}" 
-                  value="{{ field.defaultValue }}" 
-                  min="{{ field.min }}" 
-                  max="{{ field.max }}" 
-                  {% if field.isRequired %} required {% endif %}
-                >
-                {% when "select" %}
-                  <select id="field-{{ field.id }}" name="{{ field.name }}" {% if field.isRequired %} required {% endif %}>
-                    {% for option in field.options %}
-                      <option value="{{ option.value }}" {% if option.value == field.defaultValue %} selected {% endif %}>
-                        {{ option.label }}
-                      </option>
-                    {% endfor %}
-                  </select>
-            {% when "radio" %}
-              <div class="check-btn-container">
-                <input 
-                  class="check-btn"
-                  type="radio" 
-                  id="field-{{ field.id }}" 
-                  name="{{ field.name }}" 
-                >
-              </div>
-            {% when "checkbox" %}
-              <div class="check-btn-container">
-                <input 
-                class="check-btn"
-                type="checkbox" 
-                id="field-{{ field.id }}" 
-                name="{{ field.name }}" 
-                >
-              </div>
-          {% endcase %}
-        </div>
-      {% endfor %}
-      <button type="submit" class="submit-button">Submit</button>
-    </form>
-  {% else %}
-    <p>No form found for the provided ID.</p>
-  {% endif %}
-</div>
-
 <style>
   #sw-contact-form {
     max-width: 600px;
@@ -149,8 +56,133 @@
   .check-btn-container input {
     max-width: 15px;
   }
-
 </style>
+
+<div id="sw-contact-form">
+  {% assign form_id = block.settings.form_id %}
+  {% assign forms = shop.metafields.swllc.forms.value %}
+  {% assign selected_form = nil %}
+
+  {% for form in forms %}
+    {% if form.formId == form_id  %}
+      {% assign selected_form = form %}
+      {% break %}
+    {% endif %}
+  {% endfor %}
+
+  {% if selected_form %}
+    <h3>{{ selected_form.title }}</h3>
+    <form id="contact-form" class="contact-form">
+      <input type="hidden" name="formId" value="{{ form_id }}">
+      {% for field in selected_form.fields %}
+        <div class="form-group">
+          <label for="field-{{ field.id }}">
+            {{ field.label }}
+            {% if field.isRequired %} * {% endif %}
+            </label>
+          {% case field.type %}
+            {% when "text" %}
+              <input 
+                type="text" 
+                id="field-{{ field.id }}" 
+                name="{{ field.name }}" 
+                value="{{ field.defaultValue }}" 
+                placeholder="{{ field.placeholder }}" 
+                {% if field.isRequired %} required {% endif %}
+              >
+            {% when "email" %}
+              <input 
+                type="email" 
+                id="field-{{ field.id }}" 
+                name="{{ field.name }}" 
+                value="{{ field.defaultValue }}" 
+                placeholder="{{ field.placeholder }}" 
+                {% if field.isRequired %} required {% endif %}
+              >
+            {% when "textarea" %}
+              <textarea 
+                id="field-{{ field.id }}" 
+                name="{{ field.name }}" 
+                placeholder="{{ field.placeholder }}" 
+                {% if field.isRequired %} required {% endif %}
+                rows="{{ field.totalLines }}"
+              >{{ field.defaultValue }}</textarea>
+            {% when "number" %}
+              <input 
+                type="number" 
+                id="field-{{ field.id }}" 
+                name="{{ field.name }}" 
+                placeholder="{{ field.placeholder }}" 
+                value="{{ field.defaultValue }}" 
+                min="{{ field.min }}" 
+                max="{{ field.max }}" 
+                {% if field.isRequired %} required {% endif %}
+              >
+            {% when "select" %}
+              <select id="field-{{ field.id }}" name="{{ field.name }}" {% if field.isRequired %} required {% endif %}>
+                {% for option in field.options %}
+                  <option value="{{ option.value }}" {% if option.value == field.defaultValue %} selected {% endif %}>
+                    {{ option.label }}
+                  </option>
+                {% endfor %}
+              </select>
+            {% when "radio" %}
+              <div class="check-btn-container">
+                <input 
+                  class="check-btn"
+                  type="radio" 
+                  id="field-{{ field.id }}" 
+                  name="{{ field.name }}" 
+                >
+              </div>
+            {% when "checkbox" %}
+              <div class="check-btn-container">
+                <input 
+                  class="check-btn"
+                  type="checkbox" 
+                  id="field-{{ field.id }}" 
+                  name="{{ field.name }}" 
+                >
+              </div>
+          {% endcase %}
+        </div>
+      {% endfor %}
+      <button type="submit" class="submit-button">Submit</button>
+    </form>
+  {% else %}
+    <p>No form found for the provided ID.</p>
+  {% endif %}
+</div>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('contact-form');
+      
+    console.log("SW what is form", form);
+    
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault(); 
+
+      const formData = new FormData(form);
+      const url = 'http://localhost:57958/form/submit';
+
+      console.log("SW what is formData", formData);
+
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          body: formData,
+        });
+        
+      } catch (error) {
+        console.error('Error submitting form:', error);
+      }
+    });
+  });
+</script>
+
+
 
 {% schema %}
 {
