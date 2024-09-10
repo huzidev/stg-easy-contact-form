@@ -40,6 +40,8 @@ export async function action({ request, params }) {
   const { action, fields, fromValues, deleteFieldsId, publishType } =
     await request.json();
 
+  console.log("SW deleteFieldsId action", deleteFieldsId);
+
   let response;
   if (action === "publish-form") {
     response = await contact.publishForm(publishType, id);
@@ -67,8 +69,23 @@ export async function action({ request, params }) {
   });
 }
 
+function filterOptionsByUniqueValue(orignal, mutated) {
+  return mutated.map((mutatedField) => {
+      const originalField = orignal.find(o => mutatedField.id === o.id);
+      const keys = originalField?.options?.map((o) => o.value) || [];
+      
+      const mutatedOptions = mutatedField?.selectOptions?.filter(
+        (o) => !keys.find(k => k === o.value),
+      );
+
+      return { ...mutatedField, selectOptions: mutatedOptions };
+  });
+}
+
 export default function Forms() {
   const { formFields, form } = useLoaderData();
+  console.log(formFields);
+  
   const [fields, setFields] = useState(formFields || []);
   const [fromValues, setFormValues] = useState(form);
   const { heading, description, showTitle } = fromValues;
@@ -95,6 +112,8 @@ export default function Forms() {
   }, [fields, setFields]);
   
   function handleUpdate(type) {
+    const filteredFields = filterOptionsByUniqueValue(formFields, fields);
+    
     if (!fields.length) {
       shopify.toast.show("Please add at least one field");
       return;
@@ -107,11 +126,12 @@ export default function Forms() {
     if (isFormPublish) {
       setFormPublished(!isFormPublished);
     }
+
     submit(
       {
-        publishType: isFormPublish ? !isFormPublished : isFormPublished,
+        publishType: isFormPublish,
         deleteFieldsId,
-        fields,
+        fields: filteredFields,
         fromValues,
         action: type,
       },

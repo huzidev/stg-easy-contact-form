@@ -59,12 +59,12 @@
 </style>
 
 <div id="sw-contact-form">
-  {% assign form_id = block.settings.form_id %}
+  {% assign short_code = block.settings.short_code %}
   {% assign forms = shop.metafields.swllc.forms.value %}
   {% assign selected_form = nil %}
 
   {% for form in forms %}
-    {% if form.formId == form_id  %}
+    {% if form.shortCode == short_code  %}
       {% assign selected_form = form %}
       {% break %}
     {% endif %}
@@ -73,7 +73,7 @@
   {% if selected_form %}
     <h3>{{ selected_form.title }}</h3>
     <form id="contact-form" class="contact-form">
-      <input type="hidden" name="formId" value="{{ form_id }}">
+      <input type="hidden" name="formId" value="{{ selected_form.formId }}">
       {% for field in selected_form.fields %}
         <div class="form-group">
           <label for="field-{{ field.id }}">
@@ -150,7 +150,7 @@
       <button type="submit" class="submit-button">Submit</button>
     </form>
   {% else %}
-    <p>No form found for the provided ID.</p>
+    <p>No form found for the ShortCode.</p>
   {% endif %}
 </div>
 
@@ -159,18 +159,15 @@
   document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('contact-form');
       
-    console.log("SW what is form", form);
-    
     form.addEventListener('submit', async (event) => {
       event.preventDefault(); 
 
       const formData = new FormData(form);
-      const url = 'http://localhost:57958/form/submit';
-
-      console.log("SW what is formData", formData);
+      const staging_url = "https://stg-easy-contact-form.vercel.app/form/submit";
+      const url = 'http://localhost:52502/form/submit';
 
       try {
-        const response = await fetch(url, {
+        const response = await fetch(staging_url, {
           method: 'POST',
           body: formData,
         });
@@ -182,17 +179,15 @@
   });
 </script>
 
-
-
 {% schema %}
 {
   "name": "Easy Contact Form",
   "target": "section",
   "settings": [
     {
-      "type": "number",
-      "id": "form_id",
-      "label": "Published Form Id"
+      "type": "text",
+      "id": "short_code",
+      "label": "Enter Form Shortcode"
     }
   ]
 }

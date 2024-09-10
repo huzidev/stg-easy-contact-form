@@ -8,29 +8,27 @@ import {
   RadioButton,
   Select,
   Text,
-  TextField,
+  TextField
 } from "@shopify/polaris";
 import React, { useCallback, useState } from "react";
 import { TextTypes } from "../utils/data";
 
 export default function Preview({ title, showTitle, formDescription, fields }) {
   const [fieldValues, setFieldValues] = useState({});
+  const [option, setOption] = useState("");
 
-  const getValue = useCallback(
-    (fieldName) => {
-      return fieldValues[fieldName];
-    },
-    [fieldValues],
-  );
+  const getValue = useCallback((fieldName) => {
+    return fieldValues[fieldName]
+  }, [fieldValues])
 
   const setValue = (fieldName, value) => {
     setFieldValues((prev) => {
       return {
         ...prev,
-        [fieldName]: value,
-      };
-    });
-  };
+        [fieldName]: value
+      }
+    })
+  }
 
   return (
     <Box maxWidth="600px">
@@ -56,7 +54,6 @@ export default function Preview({ title, showTitle, formDescription, fields }) {
                 max,
                 totalLines,
               } = field;
-              console.log("SW defaultValue", !!defaultValue);
               const value = getValue(fieldName);
               const textFieldLabel = isRequired
                 ? `${fieldLabel} *`
@@ -77,9 +74,10 @@ export default function Preview({ title, showTitle, formDescription, fields }) {
               ) : fieldType === "select" ? (
                 <Select
                   key={i}
+                  value={option}
                   label={textFieldLabel}
                   options={selectOptions}
-                  onChange={(value) => setValue(fieldName, value)}
+                  onChange={(value) => setOption(value)}
                 />
               ) : fieldType === "radio" ? (
                 <RadioButton

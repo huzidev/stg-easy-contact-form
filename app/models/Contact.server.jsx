@@ -53,7 +53,7 @@ export default class Contact {
   async createForm(onlinePublish, formValues, fieldsValues) {
     try {
       const { heading, description, showTitle } = formValues;
-
+      
       let form = await prisma.form.create({
         data: {
           shopify_url: this.shopUrl,
@@ -61,16 +61,26 @@ export default class Contact {
           heading,
           description,
           showTitle,
+          shortCode: '',
           onlinePublish,
         },
       });
       const { id } = form;
+      const shortCode = `[sw_form_${id}]`;
+      await prisma.form.update({
+        where : {
+          id
+        },
+        data: {
+          shortCode
+        }
+      })
       const fields = await this.generateField(fieldsValues, id);
       return {
         status: 200,
         fields,
         form,
-        message: "Form Created Successfully!",
+        message: 'Form Created Successfully!'
       };
     } catch (error) {
       console.error("Error: ", error);
@@ -84,7 +94,7 @@ export default class Contact {
       return {
         status: 200,
         fields,
-        message: "Form Updated Successfully",
+        message: 'Form Updated Successfully'
       };
     } catch (error) {
       console.error("Error: ", error);
@@ -206,6 +216,36 @@ export default class Contact {
               options: true,
             },
           },
+          submissions: true
+        },
+        orderBy: {
+          id: "desc",
+        },
+      });
+      return {
+        status: !!forms.length ? 200 : 404,
+        forms,
+      };
+    } catch (error) {
+      console.error("Error : ", error);
+      throw error;
+    }
+  }
+
+  async getPublishedForms() {
+    try {
+      const forms = await prisma.form.findMany({
+        where: {
+          shopify_url: this.shopUrl,
+          onlinePublish: true,
+        },
+        include: {
+          fields: {
+            include: {
+              options: true,
+            },
+          },
+          submissions: true,
         },
         orderBy: {
           id: "desc",
@@ -227,9 +267,13 @@ export default class Contact {
         where: {
           id: parseInt(id),
         },
+        include: {
+          fields: true,
+          submissions: true
+        }
       });
       return {
-        formStatus: !!form ? 200 : 404,
+        status: !!form ? 200 : 404,
         form,
       };
     } catch (error) {

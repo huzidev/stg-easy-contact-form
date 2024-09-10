@@ -64,26 +64,27 @@ export default function SidebarField({
     shopify.toast.show(actionData?.message);
   }, [actionData]);
 
+  // delete the selected filed
   const deleteField = useCallback(() => {
     setFieldsCallback((prevFields) => {
       const fields = [...prevFields];
-      console.log("SW index when the delete is called", index);
       fields.splice(index, 1);
       if (isEditPage) {
         setDeleteFieldsId((prevId) => [...prevId, id]);
       }
       setOpen(false);
-      console.log("Fields after delete function", fields);
-
       return fields;
     });
   }, [setFieldsCallback, index, id]);
 
+  // delete the selectedOptions fields
   const handleDeleteOption = useCallback(
     (optionIndex) => {
       setFieldsCallback((prevFields) => {
+        
         const fields = [...prevFields];
         const field = fields[index];
+        console.log("SW field", field);
         field.selectOptions = field.selectOptions.filter(
           (_, i) => i !== optionIndex,
         );

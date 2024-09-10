@@ -10,6 +10,7 @@ export async function saveMetaFields(contact, session, admin) {
     const formattedForms = publishedForms.map((form) => ({
       formId: form.id,
       title: form.name,
+      shortCode: form.shortCode,
       fields: form.fields.map((field) => {
         return {
           id: field.id,
