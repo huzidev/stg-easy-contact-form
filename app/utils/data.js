@@ -32,6 +32,7 @@ export const initialFields = {
 
 export const initialFormValues = {
   heading: 'New Form',
+  merchantEmail: '',
   description: 'Enter Form Description',
   showTitle: true
 }

@@ -13,32 +13,35 @@ import {
 import React, { useCallback, useState } from "react";
 import { TextTypes } from "../utils/data";
 
-export default function Preview({ title, showTitle, formDescription, fields }) {
+export default function Preview({ heading, showTitle, description, fields }) {
   const [fieldValues, setFieldValues] = useState({});
   const [option, setOption] = useState("");
 
-  const getValue = useCallback((fieldName) => {
-    return fieldValues[fieldName]
-  }, [fieldValues])
+  const getValue = useCallback(
+    (fieldName) => {
+      return fieldValues[fieldName];
+    },
+    [fieldValues],
+  );
 
   const setValue = (fieldName, value) => {
     setFieldValues((prev) => {
       return {
         ...prev,
-        [fieldName]: value
-      }
-    })
-  }
+        [fieldName]: value,
+      };
+    });
+  };
 
   return (
     <Box maxWidth="600px">
       <Card sectioned>
         <BlockStack gap="500">
           <Text variant="heading2xl" as="h2">
-            {showTitle ? title : ""}
+            {showTitle ? heading : ""}
           </Text>
           <Text variant="heading" as="p">
-            {formDescription}
+            {description}
           </Text>
           <FormLayout>
             {fields.map((field, i) => {

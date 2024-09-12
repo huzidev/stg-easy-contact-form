@@ -77,14 +77,13 @@ export default function SidebarField({
     });
   }, [setFieldsCallback, index, id]);
 
-  // delete the selectedOptions fields
+  // delete the selectedOptions for select type
   const handleDeleteOption = useCallback(
     (optionIndex) => {
       setFieldsCallback((prevFields) => {
-        
         const fields = [...prevFields];
         const field = fields[index];
-        console.log("SW field", field);
+        console.log("SW field for delete option", field);
         field.selectOptions = field.selectOptions.filter(
           (_, i) => i !== optionIndex,
         );

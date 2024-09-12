@@ -40,8 +40,6 @@ export async function action({ request, params }) {
   const { action, fields, fromValues, deleteFieldsId, publishType } =
     await request.json();
 
-  console.log("SW deleteFieldsId action", deleteFieldsId);
-
   let response;
   if (action === "publish-form") {
     response = await contact.publishForm(publishType, id);
@@ -69,26 +67,34 @@ export async function action({ request, params }) {
   });
 }
 
-function filterOptionsByUniqueValue(orignal, mutated) {
+function filterOptionsByUniqueValue(original, mutated) {
   return mutated.map((mutatedField) => {
-      const originalField = orignal.find(o => mutatedField.id === o.id);
-      const keys = originalField?.options?.map((o) => o.value) || [];
-      
-      const mutatedOptions = mutatedField?.selectOptions?.filter(
-        (o) => !keys.find(k => k === o.value),
-      );
+    const originalField = original.find((o) => mutatedField.id === o.id);
+    const keys = originalField?.options?.map((o) => o.value) || [];
 
-      return { ...mutatedField, selectOptions: mutatedOptions };
+    console.log("SW original", original);
+    console.log("SW mutated", mutated);
+    console.log("SW keys", keys);
+
+    let mutatedOptions;
+    if (keys?.length <= mutatedField?.selectOptions?.length) {
+      mutatedOptions = mutatedField?.selectOptions?.filter(
+        (o) => !keys.find((k) => k === o.value),
+      );
+    } else {
+      mutatedOptions = originalField?.options?.filter(
+        (o) => !mutatedField.selectOptions.find((s) => s.value === o.value),
+      );
+    }
+
+    return { ...mutatedField, selectOptions: mutatedOptions };
   });
 }
 
 export default function Forms() {
   const { formFields, form } = useLoaderData();
-  console.log(formFields);
-  
   const [fields, setFields] = useState(formFields || []);
   const [fromValues, setFormValues] = useState(form);
-  const { heading, description, showTitle } = fromValues;
   const [loading, setLoading] = useState({
     type: "",
     state: false,
@@ -110,10 +116,10 @@ export default function Forms() {
   const addField = useCallback(() => {
     setFields([...fields, getNewField()]);
   }, [fields, setFields]);
-  
+
   function handleUpdate(type) {
     const filteredFields = filterOptionsByUniqueValue(formFields, fields);
-    
+
     if (!fields.length) {
       shopify.toast.show("Please add at least one field");
       return;
@@ -129,7 +135,7 @@ export default function Forms() {
 
     submit(
       {
-        publishType: isFormPublish,
+        publishType: !isFormPublished,
         deleteFieldsId,
         fields: filteredFields,
         fromValues,
@@ -168,9 +174,7 @@ export default function Forms() {
           <BlockStack gap="200">
             <Box width="100%">
               <FormHeader
-                formTitle={heading}
-                formDescription={description}
-                showTitle={showTitle}
+                {...fromValues}
                 handleChangeCallback={handleChange}
               />
             </Box>
@@ -208,9 +212,7 @@ export default function Forms() {
         </Grid.Cell>
         <Grid.Cell columnSpan={{ xs: 6, sm: 7, md: 7, lg: 8, xl: 8 }}>
           <Preview
-            title={heading}
-            showTitle={showTitle}
-            formDescription={description}
+            {...fromValues}
             fields={fields}
           />
         </Grid.Cell>

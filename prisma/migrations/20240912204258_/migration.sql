@@ -26,6 +26,7 @@ CREATE TABLE "Form" (
     "name" TEXT NOT NULL,
     "heading" TEXT,
     "description" TEXT,
+    "merchantEmail" TEXT,
     "shortCode" TEXT,
     "showTitle" BOOLEAN NOT NULL DEFAULT false,
     "onlinePublish" BOOLEAN NOT NULL DEFAULT false,

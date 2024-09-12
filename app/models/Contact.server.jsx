@@ -52,35 +52,36 @@ export default class Contact {
 
   async createForm(onlinePublish, formValues, fieldsValues) {
     try {
-      const { heading, description, showTitle } = formValues;
-      
+      const { heading, description, showTitle, merchantEmail } = formValues;
+
       let form = await prisma.form.create({
         data: {
           shopify_url: this.shopUrl,
           name: heading,
           heading,
           description,
+          merchantEmail,
           showTitle,
-          shortCode: '',
+          shortCode: "",
           onlinePublish,
         },
       });
       const { id } = form;
       const shortCode = `[sw_form_${id}]`;
       await prisma.form.update({
-        where : {
-          id
+        where: {
+          id,
         },
         data: {
-          shortCode
-        }
-      })
+          shortCode,
+        },
+      });
       const fields = await this.generateField(fieldsValues, id);
       return {
         status: 200,
         fields,
         form,
-        message: 'Form Created Successfully!'
+        message: "Form Created Successfully!",
       };
     } catch (error) {
       console.error("Error: ", error);
@@ -94,7 +95,7 @@ export default class Contact {
       return {
         status: 200,
         fields,
-        message: 'Form Updated Successfully'
+        message: "Form Updated Successfully",
       };
     } catch (error) {
       console.error("Error: ", error);
@@ -129,7 +130,7 @@ export default class Contact {
 
   async editForm(values, id) {
     try {
-      const { heading, description, showTitle } = values;
+      const { heading, description, showTitle, merchantEmail } = values;
       await prisma.form.update({
         where: {
           id: parseInt(id),
@@ -138,6 +139,7 @@ export default class Contact {
           heading,
           description,
           showTitle,
+          merchantEmail,
         },
       });
       return {
@@ -154,6 +156,19 @@ export default class Contact {
     try {
       for (let value of values) {
         const { id, formId, fieldType, selectOptions, ...updateData } = value;
+
+        if (fieldType === 'select' && !!selectOptions.length) {
+          const values = selectOptions.map(option => option.value);
+  
+          await prisma.option.deleteMany({
+            where: {
+              value: {
+                in: values,
+              },
+            },
+          });
+        }
+        
         await prisma.field.update({
           where: {
             id,
@@ -216,7 +231,7 @@ export default class Contact {
               options: true,
             },
           },
-          submissions: true
+          submissions: true,
         },
         orderBy: {
           id: "desc",
@@ -269,8 +284,8 @@ export default class Contact {
         },
         include: {
           fields: true,
-          submissions: true
-        }
+          submissions: true,
+        },
       });
       return {
         status: !!form ? 200 : 404,

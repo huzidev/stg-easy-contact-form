@@ -32,6 +32,7 @@ model Form {
   name           String
   heading        String?
   description    String?
+  merchantEmail  String?
   shortCode      String?
   showTitle      Boolean   @default(false)
   onlinePublish  Boolean   @default(false)

@@ -7,8 +7,9 @@ import {
 } from "@shopify/polaris";
 
 export default function FormHeader({
-  formTitle,
-  formDescription,
+  heading,
+  description,
+  merchantEmail,
   showTitle,
   handleChangeCallback,
 }) {
@@ -18,8 +19,18 @@ export default function FormHeader({
         <Box>
           <TextField
             label="Title"
-            value={formTitle}
+            value={heading}
             onChange={(value) => handleChangeCallback("heading", value)}
+            autoComplete="off"
+          />
+        </Box>
+        <Box>
+          <TextField
+            label="Email"
+            type="email"
+            placeholder="Receive Submissions Email"
+            value={merchantEmail}
+            onChange={(value) => handleChangeCallback("merchantEmail", value)}
             autoComplete="off"
           />
         </Box>
@@ -29,7 +40,7 @@ export default function FormHeader({
             name="description"
             placeholder="Enter Form Description"
             multiline={4}
-            value={formDescription}
+            value={description}
             onChange={(value) => handleChangeCallback("description", value)}
           />
         </Box>

@@ -23,7 +23,6 @@ export async function action({ request }) {
   const contact = new Contact(session.shop, admin.graphql);
   const { action, fields, formValues } = await request.json();
 
-  // if user clicks on publish button is isPublish will be true
   const isPublish = action === "publish-form";
   let response = await contact.createForm(isPublish, formValues, fields);
   const { form } = response;
@@ -40,7 +39,6 @@ export async function action({ request }) {
 export default function Forms() {
   const [fields, setFields] = useState([initialFields]);
   const [formValues, setFormValues] = useState(initialFormValues);
-  const { heading, description, showTitle } = formValues;
   const [loading, setLoading] = useState({
     type: "",
     state: false,
@@ -59,6 +57,8 @@ export default function Forms() {
   const addField = useCallback(() => {
     setFields([...fields, getNewField()]);
   }, [fields, setFields]);
+
+  console.log("SW fields in create form", fields);
 
   function handleCreate(type) {
     if (!fields.length) {
@@ -82,7 +82,6 @@ export default function Forms() {
   useEffect(() => {
     if (actionData?.status === 200) {
       const { form, message } = actionData;
-      console.log("SW with actionData message", message);
       
       navigate(`/app/edit-form/${form?.id}`);
       setLoading({
@@ -128,9 +127,7 @@ export default function Forms() {
           <BlockStack gap="200">
             <Box width="100%">
               <FormHeader
-                formTitle={heading}
-                formDescription={description}
-                showTitle={showTitle}
+                {...formValues}
                 handleChangeCallback={handleChange}
               />
             </Box>
@@ -168,9 +165,7 @@ export default function Forms() {
         </Grid.Cell>
         <Grid.Cell columnSpan={{ xs: 6, sm: 7, md: 7, lg: 8, xl: 8 }}>
           <Preview
-            title={heading}
-            showTitle={showTitle}
-            formDescription={description}
+            {...formValues}
             fields={fields}
           />
         </Grid.Cell>
