@@ -35,7 +35,7 @@ export async function action({ request }) {
     .join("\n");
 
   const emailData = {
-    from: "Contact Form Shopify <mailgun@sandbox2229350bb7504c478d3e5d412435a3c8.mailgun.org>",
+    from: "Contact Form Shopify <submissions-mg.1s.agency>",
     to: [form.merchantEmail],
     subject: `New Form Submission: ${form.name}`,
     template: "Submission template",
